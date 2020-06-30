@@ -1,0 +1,26 @@
+# Copyright (C) 2012 - 2020  Claire Wolf <claire@symbioticeda.com>
+
+# read design
+read_verilog rtl/processor.v
+hierarchy -check -top processor
+
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
+
+# mapping to internal cell library
+techmap; opt
+
+# mapping flip-flops to mycells.lib
+dfflibmap -liberty syn/mycells.lib
+
+# mapping logic to mycells.lib
+abc -liberty syn/mycells.lib
+
+# Show Stats
+stat -liberty syn/mycells.lib
+
+# cleanup
+#clean
+
+# write synthesized design
+write_verilog syn/synth.v
